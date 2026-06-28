@@ -9,7 +9,8 @@ if [ -z "$source" ]; then
   echo 'A source (HFR, TLH, etc) should be specified as the second argument.'
   exit
 fi
-dataset="CTH ${cth}_XML_$source"
+expected_dataset="CTH ${cth%-clb}_XML_$source"
+lemmatized_dataset="CTH ${cth}_XML_$source"
 python src/evaluate.py \
-  ~/HFR/data/expected/"$dataset" \
-  ~/HFR/data/lemmatized-xml/"$dataset"
+  ~/HFR/data/expected/"$expected_dataset" \
+  ~/HFR/data/lemmatized-xml/"$lemmatized_dataset"
