@@ -18,8 +18,7 @@ annotations = list[list[Annotation]]()
 
 corpus = Corpus(args.input_directory)
 for word in corpus.words:
-    word_annotations = sorted(set(word.annotations), key=lambda ann: tuple(map(str, ann)))
-    annotations.append(word_annotations)
+    annotations.append(word.annotations)
 
 with open(args.outfile, 'w', encoding='utf-8') as fout:
     dump(annotations, fout, ensure_ascii=False, indent=4)

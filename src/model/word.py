@@ -80,11 +80,15 @@ class Word:
     return Morph.parse(self.analyses[number])
 
   @property
-  def annotations(self) -> Iterable[Annotation]:
+  def annotations(self) -> list[Annotation]:
+    annotations = list[Annotation]()
     for selection in self.selections:
       if selection is not None:
         if selection.lexeme in self.analyses:
           analysis = self.analyses[selection.lexeme]
           morph = Morph.parse(analysis)
           if morph is not None:
-            yield morph.get_annotation(selection)
+            annotation = morph.get_annotation(selection)
+            if annotation not in annotations:
+              annotations.append(annotation)
+    return annotations
