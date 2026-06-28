@@ -11,6 +11,7 @@ from bs4 import Tag, BeautifulSoup
 from bs4.dammit import EntitySubstitution
 from .line import Line
 from .word import Word
+from .morph import Annotation
 from .formatter import CustomFormatter
 
 SentenceBoundary = Literal['clb', 'parsep', 'parsep_dbl']
@@ -90,3 +91,8 @@ class Text:
   @property
   def words(self) -> Iterable[Word]:
     return chain.from_iterable(line.words for line in self.lines)
+
+  @property
+  def annotations(self) -> Iterable[list[Annotation]]:
+    for word in self.words:
+      yield word.annotations

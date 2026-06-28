@@ -10,6 +10,7 @@ from .line import Line
 from itertools import chain
 from logging import getLogger
 from .word import Word
+from .morph import Annotation
 logger = getLogger(__name__)
 
 PROCESSED_FILE_LOGGER_NAME = 'processed_files'
@@ -63,3 +64,8 @@ class Corpus:
   @property
   def words(self) -> Iterable[Word]:
     return chain.from_iterable(text.words for text in self.texts)
+
+  @property
+  def annotations(self) -> Iterable[list[Annotation]]:
+    for text in self.texts:
+      yield from text.annotations

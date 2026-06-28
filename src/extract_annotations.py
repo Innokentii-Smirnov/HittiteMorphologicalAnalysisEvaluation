@@ -14,11 +14,8 @@ parser.add_argument('outfile',
                     help='a name for the JSON file to store the result')
 args = parser.parse_args()
 
-annotations = list[list[Annotation]]()
-
 corpus = Corpus(args.input_directory)
-for word in corpus.words:
-    annotations.append(word.annotations)
+annotations = list(corpus.annotations)
 
 with open(args.outfile, 'w', encoding='utf-8') as fout:
     dump(annotations, fout, ensure_ascii=False, indent=4)
