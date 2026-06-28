@@ -41,6 +41,9 @@ assert isinstance(precision, float)
 assert isinstance(recall, float)
 assert isinstance(fscore, float)
 
+print('Number of word tokens in the matched texts: {0}'.format(len(expected_annotations)))
+print('Number of distinct expected annotations: {0}'.format(len(mlb.classes_)))
+
 print('Precision: {0:.2f}'.format(100 * precision))
 print('Recall: {0:.2f}'.format(100 * recall))
 print('F1-score: {0:.2f}'.format(100 * fscore))
