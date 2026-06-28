@@ -3,6 +3,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from sklearn.metrics import precision_recall_fscore_support
 from model.corpus import Corpus
 from model.morph import Annotation
+import loggers
 
 parser = ArgumentParser(
   prog='evaluate.py',
