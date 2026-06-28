@@ -1,5 +1,9 @@
 from __future__ import annotations
 from logging import getLogger
+from .selection import Selection
+
+Annotation = tuple[str, str | None, str | None]
+
 logger = getLogger(__name__)
 
 sep = '@'
@@ -132,6 +136,14 @@ class Morph:
         return MultiMorph(segmentation, translation, morph_tags, pos, det, enclitics_analysis)
       else:
         return SingleMorph(segmentation, translation, morph_info, pos, det, enclitics_analysis)
+
+    def get_annotation(self, selection: Selection) -> Annotation:
+        morph_tag = self.get_morph_tag(selection.gramm_form)
+        if self.enclitics_analysis is not None:
+            encl_tag = self.enclitics_analysis.get_morph_tag(selection.encl_chain)
+        else:
+            encl_tag = None
+        return (self.segmentation, morph_tag, encl_tag)
         
 class SingleMorph(Morph):
     
