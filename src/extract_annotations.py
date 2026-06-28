@@ -1,7 +1,6 @@
 from argparse import ArgumentParser
 from json import dump
 from model.corpus import Corpus
-from model.morph import Morph, Annotation
 import loggers
 
 parser = ArgumentParser(
