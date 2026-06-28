@@ -138,7 +138,7 @@ class Morph:
         return SingleMorph(segmentation, translation, morph_info, pos, det, enclitics_analysis)
 
     def get_annotation(self, selection: Selection) -> Annotation:
-        morph_tag = self.get_morph_tag(selection.gramm_form)
+        morph_tag = self.get_morph_tag(selection.gramm_form) or self.pos
         if self.enclitics_analysis is not None:
             encl_tag = self.enclitics_analysis.get_morph_tag(selection.encl_chain)
         else:
