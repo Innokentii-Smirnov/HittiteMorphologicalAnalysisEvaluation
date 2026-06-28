@@ -92,3 +92,24 @@ class Word:
             if annotation not in annotations:
               annotations.append(annotation)
     return annotations
+
+  @property
+  def all_annotations(self) -> list[Annotation]:
+    annotations = list[Annotation]()
+    for analysis in self.analyses.values():
+      morph = Morph.parse(analysis)
+      if morph is not None:
+        for morph_tag in morph.to_multi('a').morph_tags.values():
+          if morph.enclitics_analysis is None:
+            annotation = (morph.segmentation, morph_tag, '_')
+            if annotation not in annotations:
+              annotations.append(annotation)
+          else:
+            for encl_tag in morph.enclitics_analysis.to_multi('R').morph_tags.values():
+              annotation = (morph.segmentation, morph_tag, encl_tag)
+              if annotation not in annotations:
+                annotations.append(annotation)
+    return annotations
+
+  def is_ambiguous(self) -> bool:
+    return len(self.all_annotations) > 1

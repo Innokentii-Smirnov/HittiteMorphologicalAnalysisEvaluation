@@ -24,7 +24,7 @@ for exp_text, pred_text in expected_corpus.zip(pred_corpus):
   if len(exp_text) == len(pred_text):
     print('Matched', exp_text.text_id)
     for exp_word, pred_word in exp_text.zip(pred_text):
-      if exp_word.lang == 'Hit':
+      if exp_word.lang == 'Hit' and pred_word.is_ambiguous():
         expected_annotations.append(exp_word.annotations)
         pred_annotations.append(pred_word.annotations)
   else:
