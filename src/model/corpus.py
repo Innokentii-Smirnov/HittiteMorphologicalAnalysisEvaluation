@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from collections.abc import Iterable
 from typing import Callable, Sequence
@@ -69,3 +70,12 @@ class Corpus:
   def annotations(self) -> Iterable[list[Annotation]]:
     for text in self.texts:
       yield from text.annotations
+
+  def zip(self, other: Corpus) -> Iterable[tuple[Text, Text]]:
+    for own_text, other_text in zip(self.texts, other.texts, strict=True):
+      if own_text.text_id != other_text.text_id:
+        message = 'Texts had different identifiers: {0} and {1}'.format(
+          own_text.text_id, other_text.text_id
+        )
+        raise ValueError(message)
+      yield own_text, other_text
