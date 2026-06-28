@@ -21,15 +21,25 @@ pred_corpus = Corpus(args.automatically_annotated_corpus)
 expected_annotations = list[list[Annotation]]()
 pred_annotations = list[list[Annotation]]()
 
+i = 0
 for exp_text, pred_text in expected_corpus.zip(pred_corpus):
   if len(exp_text) == len(pred_text):
     print('Matched', exp_text.text_id)
     for exp_word, pred_word in exp_text.zip(pred_text):
       if exp_word.lang == 'Hit' and pred_word.is_ambiguous():
-        expected_annotations.append(exp_word.annotations)
-        pred_annotations.append(pred_word.annotations)
-  else:
-    print('Ignoring', exp_text.text_id)
+        exp_word_annotations = exp_word.annotations
+        pred_word_annotations = pred_word.annotations
+        expected_annotations.append(exp_word_annotations)
+        pred_annotations.append(pred_word_annotations)
+        print('{0}) {1}'.format(i, exp_word.transcription))
+        i += 1
+        print(exp_word_annotations)
+        if set(pred_word_annotations) != set(exp_word_annotations):
+          print('!!!')
+          print(pred_word_annotations)
+        print()
+  # else:
+  #   print('Ignoring', exp_text.text_id)
 
 mlb = MultiLabelBinarizer(sparse_output=True)
 exp = mlb.fit_transform(expected_annotations)
