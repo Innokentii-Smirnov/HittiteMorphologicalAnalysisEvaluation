@@ -96,3 +96,9 @@ class Text:
   def annotations(self) -> Iterable[list[Annotation]]:
     for word in self.words:
       yield word.annotations
+
+  def __len__(self) -> int:
+    """ The length of the text in words.
+    :return: The number of words in the text.
+    """
+    return len(self.soup('w'))
