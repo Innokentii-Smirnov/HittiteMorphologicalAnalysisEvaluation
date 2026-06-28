@@ -102,3 +102,12 @@ class Text:
     :return: The number of words in the text.
     """
     return len(self.soup('w'))
+
+  def zip(self, other: Text) -> Iterable[tuple[Word, Word]]:
+    for own_word, other_word in zip(self.words, other.words, strict=True):
+      if own_word.transliteration != other_word.transliteration:
+        message = 'Different words found: {0} and {1}'.format(
+          own_word.transliteration, other_word.transliteration
+        )
+        logger.warning(message)
+      yield own_word, other_word
