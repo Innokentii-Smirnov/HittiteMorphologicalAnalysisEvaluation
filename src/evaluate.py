@@ -42,7 +42,8 @@ for exp_text, pred_text in expected_corpus.zip(pred_corpus):
   #   print('Ignoring', exp_text.text_id)
 
 mlb = MultiLabelBinarizer(sparse_output=True)
-exp = mlb.fit_transform(expected_annotations)
+mlb.fit(expected_annotations + pred_annotations)
+exp = mlb.transform(expected_annotations)
 pred = mlb.transform(pred_annotations)
 
 precision, recall, fscore, support = precision_recall_fscore_support(
@@ -54,7 +55,7 @@ assert isinstance(recall, float)
 assert isinstance(fscore, float)
 
 print('Number of word tokens in the matched texts: {0}'.format(len(expected_annotations)))
-print('Number of distinct expected annotations: {0}'.format(len(mlb.classes_)))
+print('Number of distinct annotations: {0}'.format(len(mlb.classes_)))
 
 print('Precision: {0:.2f}'.format(100 * precision))
 print('Recall: {0:.2f}'.format(100 * recall))
