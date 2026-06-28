@@ -2,7 +2,7 @@ from __future__ import annotations
 from logging import getLogger
 from .selection import Selection
 
-Annotation = tuple[str, str | None, str | None]
+Annotation = tuple[str, str, str]
 
 logger = getLogger(__name__)
 
@@ -143,7 +143,7 @@ class Morph:
             encl_tag = self.enclitics_analysis.get_morph_tag(selection.encl_chain)
         else:
             encl_tag = None
-        return (self.segmentation, morph_tag, encl_tag)
+        return (self.segmentation, morph_tag or '_', encl_tag or '_')
         
 class SingleMorph(Morph):
     
