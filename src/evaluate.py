@@ -28,7 +28,7 @@ for exp_text, pred_text in expected_corpus.zip(pred_corpus):
   else:
     print('Ignoring', exp_text.text_id)
 
-mlb = MultiLabelBinarizer()
+mlb = MultiLabelBinarizer(sparse_output=True)
 exp = mlb.fit_transform(expected_annotations)
 pred = mlb.transform(pred_annotations)
 
