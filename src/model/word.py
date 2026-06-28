@@ -1,8 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from collections.abc import Iterable
 from more_itertools import first
 from .selection import Selection
-from .morph import Morph, SingleMorph, MultiMorph
+from .morph import Morph, SingleMorph, MultiMorph, Annotation
 from re import compile
 from bs4 import Tag
 from bs4.element import NavigableString
@@ -77,3 +78,13 @@ class Word:
 
   def __getitem__(self, number: int) -> Morph | None:
     return Morph.parse(self.analyses[number])
+
+  @property
+  def annotations(self) -> Iterable[Annotation]:
+    for selection in self.selections:
+      if selection is not None:
+        if selection.lexeme in self.analyses:
+          analysis = self.analyses[selection.lexeme]
+          morph = Morph.parse(analysis)
+          if morph is not None:
+            yield morph.get_annotation(selection)
