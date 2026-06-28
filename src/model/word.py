@@ -101,7 +101,7 @@ class Word:
       if morph is not None:
         for morph_tag in morph.to_multi('a').morph_tags.values():
           if morph.enclitics_analysis is None:
-            annotation = (morph.segmentation, morph_tag, '_')
+            annotation = (morph.segmentation, morph_tag or morph.pos, '_')
             if annotation not in annotations:
               annotations.append(annotation)
           else:
