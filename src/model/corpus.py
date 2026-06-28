@@ -9,6 +9,7 @@ from os import path
 from .line import Line
 from itertools import chain
 from logging import getLogger
+from .word import Word
 logger = getLogger(__name__)
 
 PROCESSED_FILE_LOGGER_NAME = 'processed_files'
@@ -19,7 +20,7 @@ skipped_file_logger = getLogger(SKIPPED_FILE_LOGGER_NAME)
 def to_be_procecced(triple: tuple[str, list[str], list[str]]) -> bool:
   dirpath, dirnames, filenames = triple
   _, folder = path.split(dirpath)
-  return True
+  return folder != 'Backup'
 
 @dataclass
 class Corpus:
@@ -34,14 +35,14 @@ class Corpus:
 
   @property
   def texts(self) -> Iterable[Text]:
-    walk = list(filter(to_be_procecced, os.walk(self.input_directory)))
+    walk = sorted(filter(to_be_procecced, os.walk(self.input_directory)))
     progress_bar = tqdm(walk)
     for dirpath, dirnames, filenames in progress_bar:
       rel_path = dirpath.removeprefix(self.input_directory).removeprefix(os.sep)
       processed_file_logger.info(rel_path)
       _, folder = path.split(dirpath)
       progress_bar.set_postfix_str(folder)
-      for filename in filenames:
+      for filename in sorted(filenames):
         text_id, ext = path.splitext(filename)
         if ext == '.xml':
           rel_name = path.join(rel_path, filename)
@@ -58,3 +59,7 @@ class Corpus:
             logger.exception(
               'A text could not be read from the file %s because of the following exception:', rel_name
             )
+
+  @property
+  def words(self) -> Iterable[Word]:
+    return chain.from_iterable(text.words for text in self.texts)

@@ -5,10 +5,12 @@ from os import path
 from io import TextIOBase
 from logging import getLogger
 from typing import Literal, Sequence, IO
+from itertools import chain
 from more_itertools import split_before, split_at
 from bs4 import Tag, BeautifulSoup
 from bs4.dammit import EntitySubstitution
 from .line import Line
+from .word import Word
 from .formatter import CustomFormatter
 
 SentenceBoundary = Literal['clb', 'parsep', 'parsep_dbl']
@@ -84,3 +86,7 @@ class Text:
     else:
       text_lang = 'Hit'
     return cls(rel_path, text_id, text_tag, text_lang, soup)
+
+  @property
+  def words(self) -> Iterable[Word]:
+    return chain.from_iterable(line.words for line in self.lines)

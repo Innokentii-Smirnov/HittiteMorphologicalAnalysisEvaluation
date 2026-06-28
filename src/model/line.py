@@ -1,9 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from collections.abc import Iterator
+from collections.abc import Iterator, Iterable
 from bs4 import Tag
 from logging import getLogger
 from os.path import join
+from .word import Word
 
 @dataclass(frozen=True)
 class Line:
@@ -52,3 +53,10 @@ class Line:
       language = cls.UNKNOWN_LANGUAGE
       word_elements = elements
     return Line(text_path, text_id, line_id, language, word_elements)
+
+  @property
+  def words(self) -> Iterable[Word]:
+    for element in self.word_elements:
+      if element.name == 'w':
+        word = Word.parse(element, self.language)
+        yield word
