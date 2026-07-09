@@ -72,10 +72,20 @@ class Corpus:
       yield from text.annotations
 
   def zip(self, other: Corpus) -> Iterable[tuple[Text, Text]]:
-    for own_text, other_text in zip(self.texts, other.texts, strict=True):
-      if own_text.text_id != other_text.text_id:
+    other_texts = iter(other.texts)
+    skipped_own_text = False
+    for i, own_text in enumerate(self.texts):
+      if not skipped_own_text:
+        try:
+          other_text = next(other_texts)
+        except StopIteration:
+          print(own_text.text_id)
+      if own_text.text_id == other_text.text_id:
+        yield own_text, other_text
+        skipped_own_text = False
+      else:
+        skipped_own_text = True
         message = 'Texts had different identifiers: {0} and {1}'.format(
           own_text.text_id, other_text.text_id
         )
-        raise ValueError(message)
-      yield own_text, other_text
+        print(message)
