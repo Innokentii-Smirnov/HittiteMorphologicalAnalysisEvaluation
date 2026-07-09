@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 from logging import getLogger
 from .selection import Selection
 
@@ -7,6 +8,8 @@ Annotation = tuple[str, str, str]
 logger = getLogger(__name__)
 
 sep = '@'
+
+ENCIRCLED_SYMBOLS = re.compile('^[①-⑳⓵-⓾Ⓐ-ⓩ]+ ')
 
 def split_at_single(value: str, split_string: str,
                     split_at_last: bool=False) -> tuple[str, str | None]:
@@ -138,12 +141,13 @@ class Morph:
         return SingleMorph(segmentation, translation, morph_info, pos, det, enclitics_analysis)
 
     def get_annotation(self, selection: Selection) -> Annotation:
+        segmentation = ENCIRCLED_SYMBOLS.sub('', self.segmentation)
         morph_tag = self.get_morph_tag(selection.gramm_form) or self.pos
         if self.enclitics_analysis is not None:
             encl_tag = self.enclitics_analysis.get_morph_tag(selection.encl_chain)
         else:
             encl_tag = None
-        return (self.segmentation, morph_tag or '_', encl_tag or '_')
+        return (segmentation, morph_tag or '_', encl_tag or '_')
         
 class SingleMorph(Morph):
     
